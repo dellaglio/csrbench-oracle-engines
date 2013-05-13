@@ -1,0 +1,11 @@
+PREFIX om-owl: <http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#> 
+PREFIX weather: <http://knoesis.wright.edu/ssw/ont/weather.owl#> 
+SELECT ?sensor ?obs  
+FROM NAMED STREAM <http://cwi.nl/SRBench/observations>[NOW - 5 S SLIDE 1 S]
+WHERE { 
+  ?obs om-owl:observedProperty weather:_AirTemperature ;  
+       om-owl:procedure ?sensor ; 
+       om-owl:result ?res .
+  ?res om-owl:floatValue ?value .
+  FILTER(?value > 80)
+}

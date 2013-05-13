@@ -1,0 +1,77 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ssn: <http://purl.oclc.org/NET/ssnx/ssn#> . 
+@prefix dul: <http://www.loa-cnr.it/ontologies/DUL.owl#> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix morph: <http://oeg-upm.net/ns/morph#> .
+@prefix om-owl: <http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#> .
+@prefix weather: <http://knoesis.wright.edu/ssw/ont/weather.owl#> .
+@prefix sens-obs: <http://knoesis.wright.edu/ssw/> .
+@prefix owl-time: <http://www.w3.org/2006/time#> .
+@prefix srbench: <http://cwi.nl/SRBench/> .
+@prefix : <http://es.upm.fi.dia.oeg/R2RMapping#> . 
+
+:lsdObsTable rr:tableName "lsd_observations"; morph:pk "code,timeformat" .
+
+:systemProcedure rr:predicate om-owl:procedure; 
+                rr:objectMap [ rr:template "http://knoesis.wright.edu/ssw/System_{code}"   ]
+.
+
+:tempObsResult a rr:TriplesMap;
+  rr:logicalTable :lsdObsTable; 
+  rr:subjectMap   [ rr:template "http://knoesis.wright.edu/ssw/MeasureData_AirTemperature_{code}_{timeformat}"; 
+                    rr:class om-owl:MeasureData; rr:graph srbench:observations ];
+  rr:predicateObjectMap [ rr:predicate om-owl:floatValue; rr:objectMap	[ rr:column "temperature" ] ];     		   		  
+  rr:predicateObjectMap [ rr:predicate om-owl:uom; rr:objectMap	[ rr:constant weather:celsius ] ];     		   		  
+.
+
+:tempObs a rr:TriplesMap;
+  rr:logicalTable :lsdObsTable;
+  rr:subjectMap   [ rr:template "http://knoesis.wright.edu/ssw/Observation_AirTemperature_{code}_{timeformat}"; 
+                    rr:class weather:TemperatureObservation; rr:graph srbench:observations ];
+  rr:predicateObjectMap [ rr:predicate om-owl:result;
+                          rr:objectMap [ rr:parentTriplesMap :tempObsResult; 
+                                         rr:joinCondition [rr:parent "stationId";rr:child "stationId"] ]];
+  rr:predicateObjectMap :systemProcedure;
+  rr:predicateObjectMap [ rr:predicate om-owl:observedProperty; rr:objectMap [ rr:constant weather:_AirTemperature] ];
+.   
+ 
+:precObsResult a rr:TrriplesMap;
+  rr:logicalTable :lsdObsTable; 
+  rr:subjectMap   [ rr:template "http://meteo.us/{stationId}/precipitation/observationResult/{observationTime}"; 
+                    rr:class om-owl:Result; rr:graph srbench:observations ];
+  rr:predicateObjectMap [ rr:predicate om-owl:floatValue; rr:objectMap	[ rr:column "precipitation" ] ];     		   		  
+  rr:predicateObjectMap [ rr:predicate om-owl:uom; rr:objectMap	[ rr:constant morph:centimeters ] ];     		   		  
+.
+
+:precObs a rr:TrriplesMap;
+  rr:logicalTable :lsdObsTable;
+  rr:subjectMap   [ rr:template "http://meteo.us/{stationId}/precipitation/observation/{observationTime}"; 
+                    rr:class weather:RainfallObservation; rr:graph srbench:observations ];
+  rr:predicateObjectMap [ rr:predicate om-owl:result;
+                          rr:objectMap [ rr:parentTriplesMap :precObsResult; 
+                                         rr:joinCondition [rr:parent "stationId";rr:child "stationId"] ]];
+  rr:predicateObjectMap [ rr:predicate om-owl:observedBy; rr:objectMap [ rr:template "http://meteo.us/station_{stationId}"] ];
+  rr:predicateObjectMap [ rr:predicate om-owl:observedProperty; rr:objectMap [ rr:constant weather:Precipitation] ];
+.   
+ 
+:humObsResult a rr:TriplesMap;
+  rr:logicalTable :lsdObsTable; 
+  rr:subjectMap   [ rr:template "http://knoesis.wright.edu/ssw/MeasureData_RelativeHumidity_{code}_{timeformat}"; 
+                    rr:class om-owl:MeasureData; rr:graph srbench:observations ];
+  rr:predicateObjectMap [ rr:predicate om-owl:floatValue; rr:objectMap	[ rr:column "relativeHumidity" ] ];     		   		  
+  rr:predicateObjectMap [ rr:predicate om-owl:uom; rr:objectMap	[ rr:constant weather:percentage ] ];     		   		  
+.
+
+
+:humObs a rr:TriplesMap;
+  rr:logicalTable :lsdObsTable;
+  rr:subjectMap   [ rr:template "http://knoesis.wright.edu/ssw/Observation_RelativeHumidity_{code}_{timeformat}"; 
+                    rr:class weather:HumidityObservation; rr:graph srbench:observations ];
+  rr:predicateObjectMap [ rr:predicate om-owl:result;
+                          rr:objectMap [ rr:parentTriplesMap :humObsResult; 
+                                         rr:joinCondition [rr:parent "stationId";rr:child "stationId"] ]];
+  rr:predicateObjectMap :systemProcedure;
+  rr:predicateObjectMap [ rr:predicate om-owl:observedProperty; rr:objectMap [ rr:constant weather:_RelativeHumidity] ];
+.   
