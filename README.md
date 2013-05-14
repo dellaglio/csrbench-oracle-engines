@@ -6,5 +6,8 @@ Implementing query engines execute the CSRBench queries and produce Json results
 
 https://github.com/dellaglio/csrbench-oracle
 
-Current implementations available: C-SPARQL, SPARQLStream, CQELS.
+Current implementations available: 
+* C-SPARQL 
+* SPARQLStream (https://github.com/dellaglio/csrbench-oracle-engines/wiki/SPARQLStream-query-evaluation)
+* CQELS.
 
