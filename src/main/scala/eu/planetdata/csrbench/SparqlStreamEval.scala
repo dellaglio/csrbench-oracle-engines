@@ -26,10 +26,10 @@ class SparqlStreamEval(propsFile:String) {
   val serialize=props.getProperty("srbench.serialize")
   val maxtime=props.getProperty("srbench.maxtime").toInt
   
-  private def load(q:String)= ParameterUtils.loadQuery("queries/srbench/"+q)
+  private def load(q:String)= ParameterUtils.loadQuery("queries/srbench/q"+q+".sparql")
   
   def run{
-    val o=new FileOutputStream("results/"+query+".json")    
+    val o=new FileOutputStream("results/sparqlstream-answer-"+query+".json")    
     val rec=new ResultsReceiver(Platform.currentTime,rate)
 
     logger.info("pushing")
