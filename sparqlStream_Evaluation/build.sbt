@@ -16,6 +16,7 @@ libraryDependencies ++= Seq(
 resolvers ++= Seq(
   DefaultMavenRepository,
   "Local ivy Repository" at "file://"+Path.userHome.absolutePath+"/.ivy2/local",
+  "typesafe" at "http://repo.typesafe.com/typesafe/releases/",
   "aldebaran-releases" at "http://aldebaran.dia.fi.upm.es/artifactory/sstreams-releases-local"
  )
 
