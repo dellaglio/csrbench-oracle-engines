@@ -9,6 +9,7 @@ import eu.planetdata.csrbench.test.gsonUtilities.InternalBindingSerializer;
 import eu.planetdata.csrbench.test.gsonUtilities.InternalRelation;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -96,7 +97,10 @@ public class CqelsTestClass {
 
 			for(final String testIDString : testSet){
 				logger.info("Starting test number {}",testIDString);
-				context = new ExecContext("../CQELS", false);
+				File f = new File("CQELS_Context");
+				if(!f.exists())
+					f.mkdir();
+				context = new ExecContext(f.getAbsolutePath(), false);
 				doTest(Integer.parseInt(testIDString));
 				Thread.sleep(2000);
 			}
