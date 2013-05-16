@@ -97,9 +97,14 @@ public class CqelsTestClass {
 
 			for(final String testIDString : testSet){
 				logger.info("Starting test number {}",testIDString);
+				/*
+				 * WARNING: the following piece of code controls if the cache folder for secret already exists, and create the folder if not. 
+				 *			Don't delete the following lines
+				 */
 				File f = new File("CQELS_Context");
 				if(!f.exists())
 					f.mkdir();
+				
 				context = new ExecContext(f.getAbsolutePath(), false);
 				doTest(Integer.parseInt(testIDString));
 				Thread.sleep(2000);
